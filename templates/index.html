@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="text-center py-5" style="max-width: 700px; margin: 0 auto;">
+
+    <img src="{{ url_for('static', filename='images/adun_logo.png') }}"
+         width="90" class="mb-4">
+
+    <div style="display: inline-block; background: rgba(232,160,32,0.15);
+                border: 1px solid rgba(232,160,32,0.4);
+                border-radius: 20px; padding: 6px 18px; margin-bottom: 20px;">
+        <span style="color: #E8A020; font-weight: 700; font-size: 13px;">
+            SMART EVENT MEDIA ARCHIVE
+        </span>
+    </div>
+
+    <h1 style="font-size: 42px; font-weight: 900; color: #0B2458;
+               line-height: 1.15; margin-bottom: 16px;">
+        Your School Memories,<br>
+        <span style="color: #E8A020;">Always Within Reach</span>
+    </h1>
+
+    <p style="color: #6B7A99; font-size: 17px; line-height: 1.7;
+              margin-bottom: 36px;">
+        Access photos from every ADUN event — matriculation, convocation,
+        sports day, cultural night and more. Powered by AI face detection.
+    </p>
+
+    <div class="d-flex gap-3 justify-content-center flex-wrap">
+        <a href="/login" class="btn btn-navy btn-lg px-5">
+            Student Login
+        </a>
+        <a href="/register"
+           class="btn btn-lg px-5 fw-bold"
+           style="border: 2px solid #0B2458; color: #0B2458;
+                  border-radius: 10px; background: white;">
+            Create Account
+        </a>
+    </div>
+
+    <div class="d-flex gap-4 justify-content-center mt-4 flex-wrap">
+        <span style="color: #6B7A99; font-size: 13px;">Secure Access</span>
+        <span style="color: #6B7A99; font-size: 13px;">AI Face Detection</span>
+        <span style="color: #6B7A99; font-size: 13px;">Works on Any Device</span>
+    </div>
+
+</div>
+
+<div class="row g-3 mt-4" style="max-width: 800px; margin: 0 auto;">
+    <div class="col-6 col-md-3 text-center">
+        <div class="adun-card py-3">
+            <div style="font-size: 22px; font-weight: 900;
+                        color: #0B2458;">Photos</div>
+            <div style="font-size: 12px; color: #6B7A99;">Archived</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3 text-center">
+        <div class="adun-card py-3">
+            <div style="font-size: 22px; font-weight: 900;
+                        color: #0B2458;">Events</div>
+            <div style="font-size: 12px; color: #6B7A99;">Covered</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3 text-center">
+        <div class="adun-card py-3">
+            <div style="font-size: 22px; font-weight: 900;
+                        color: #0B2458;">Faces</div>
+            <div style="font-size: 12px; color: #6B7A99;">Detected</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3 text-center">
+        <div class="adun-card py-3">
+            <div style="font-size: 22px; font-weight: 900;
+                        color: #0B2458;">Students</div>
+            <div style="font-size: 12px; color: #6B7A99;">Registered</div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

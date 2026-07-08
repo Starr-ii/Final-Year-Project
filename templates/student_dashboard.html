@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="p-4 mb-4 rounded-3"
+     style="background: linear-gradient(135deg, #0B2458, #1A3A7A);
+            color: white;">
+    <h3 class="fw-bold mb-1">
+        Welcome, {{ current_user.full_name }}
+    </h3>
+    <p style="opacity: 0.7; font-size: 14px; margin: 0;">
+        Find and download your event photos
+    </p>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-4 col-sm-6">
+        <a href="/gallery" style="text-decoration: none;">
+            <div class="card border-0 shadow-sm text-center py-4 px-3"
+                 style="border-radius: 14px; transition: all 0.2s;"
+                 onmouseover="this.style.transform='translateY(-4px)';
+                              this.style.boxShadow='0 8px 24px rgba(11,36,88,0.15)'"
+                 onmouseout="this.style.transform='translateY(0)';
+                             this.style.boxShadow=''">
+                <p class="fw-bold mb-1" style="color: #0B2458; font-size: 16px;">
+                    Gallery
+                </p>
+                <p class="text-muted mb-0" style="font-size: 13px;">
+                    Browse all event photos
+                </p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4 col-sm-6">
+        <a href="/search" style="text-decoration: none;">
+            <div class="card border-0 shadow-sm text-center py-4 px-3"
+                 style="border-radius: 14px; transition: all 0.2s;"
+                 onmouseover="this.style.transform='translateY(-4px)';
+                              this.style.boxShadow='0 8px 24px rgba(11,36,88,0.15)'"
+                 onmouseout="this.style.transform='translateY(0)';
+                             this.style.boxShadow=''">
+                <p class="fw-bold mb-1" style="color: #0B2458; font-size: 16px;">
+                    Search
+                </p>
+                <p class="text-muted mb-0" style="font-size: 13px;">
+                    Find your photos by name
+                </p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4 col-sm-6">
+        <a href="/search" style="text-decoration: none;">
+            <div class="card border-0 shadow-sm text-center py-4 px-3"
+                 style="border-radius: 14px; transition: all 0.2s;"
+                 onmouseover="this.style.transform='translateY(-4px)';
+                              this.style.boxShadow='0 8px 24px rgba(11,36,88,0.15)'"
+                 onmouseout="this.style.transform='translateY(0)';
+                             this.style.boxShadow=''">
+                <p class="fw-bold mb-1" style="color: #0B2458; font-size: 16px;">
+                    Download
+                </p>
+                <p class="text-muted mb-0" style="font-size: 13px;">
+                    Save your photos
+                </p>
+            </div>
+        </a>
+    </div>
+</div>
+
+{% endblock %}

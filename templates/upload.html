@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="mb-4">
+            <h2 class="page-title">Upload Event Photos</h2>
+            <p class="page-subtitle">
+                Photos are processed automatically by AI face detection
+            </p>
+        </div>
+
+        <div class="card border-0 shadow-sm p-4"
+             style="border-radius: 14px;">
+            <form method="POST" action="/upload"
+                  enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label">Select Event</label>
+                    <select name="event_id"
+                            class="form-select form-select-lg" required>
+                        <option value="">Choose an event...</option>
+                        {% for event in events %}
+                        <option value="{{ event.id }}">
+                            {{ event.event_name }} — {{ event.event_date }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Select Photos</label>
+                    <input type="file" name="photos"
+                           class="form-control form-control-lg"
+                           accept="image/*,.orf,.cr2,.nef,.arw,.dng,.rw2"
+                           multiple required>
+                    <div class="form-text mt-1" style="font-size: 12px;">
+                        Supports JPG, PNG, ORF, CR2, NEF, ARW —
+                        Maximum 32MB per file
+                    </div>
+                </div>
+
+                <div class="p-3 mb-4 rounded-3"
+                     style="background: #EAF2FB;
+                            border-left: 4px solid #0B2458;">
+                    <p class="fw-bold mb-2"
+                       style="color: #0B2458; font-size: 13px;">
+                        What happens after upload:
+                    </p>
+                    <ol class="mb-0"
+                        style="color: #6B7A99; font-size: 13px;">
+                        <li>RAW files converted to JPEG automatically</li>
+                        <li>OpenCV scans for faces</li>
+                        <li>Green boxes drawn around detected faces</li>
+                        <li>Face count saved to database</li>
+                        <li>Photo available in gallery immediately</li>
+                    </ol>
+                </div>
+
+                <button type="submit"
+                        class="btn btn-navy btn-lg w-100 fw-bold">
+                    Upload Photos
+                </button>
+            </form>
+
+            <div class="text-center mt-3">
+                <a href="/gallery"
+                   style="color: #0B2458; font-size: 14px;
+                          font-weight: 600;">
+                    View Gallery
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

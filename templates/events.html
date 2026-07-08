@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="page-title">All Events</h2>
+        <p class="page-subtitle">Manage school event categories</p>
+    </div>
+    <a href="/create_event" class="btn btn-navy">+ Create Event</a>
+</div>
+
+{% if events %}
+    <div class="row g-4">
+        {% for event in events %}
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100"
+                 style="border-radius: 14px;">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-1" style="color: #0B2458;">
+                        {{ event.event_name }}
+                    </h5>
+                    <p class="text-muted mb-1" style="font-size: 13px;">
+                        {{ event.event_date }}
+                    </p>
+                    {% if event.description %}
+                    <p class="text-muted mb-3" style="font-size: 13px;">
+                        {{ event.description }}
+                    </p>
+                    {% endif %}
+                    <div class="d-flex gap-2 mt-3">
+                        <a href="/upload"
+                           class="btn btn-sm fw-bold flex-fill"
+                           style="background: #0B2458; color: white;
+                                  border-radius: 8px; padding: 9px 0;
+                                  font-size: 13px; transition: all 0.2s;"
+                           onmouseover="this.style.background='#1A3A7A'"
+                           onmouseout="this.style.background='#0B2458'">
+                            Upload Photos
+                        </a>
+                        <a href="/delete_event/{{ event.id }}"
+                           class="btn btn-sm fw-bold flex-fill"
+                           style="background: white; color: #DC2626;
+                                  border: 1.5px solid #FECACA;
+                                  border-radius: 8px; padding: 9px 0;
+                                  font-size: 13px; transition: all 0.2s;"
+                           onmouseover="this.style.background='#DC2626';
+                                        this.style.color='white'"
+                           onmouseout="this.style.background='white';
+                                       this.style.color='#DC2626'"
+                           onclick="return confirm('Delete this event?')">
+                            Delete
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+{% else %}
+    <div class="text-center py-5">
+        <p class="text-muted fs-5">No events yet.</p>
+        <a href="/create_event" class="btn btn-navy mt-2">
+            Create Your First Event
+        </a>
+    </div>
+{% endif %}
+
+{% endblock %}

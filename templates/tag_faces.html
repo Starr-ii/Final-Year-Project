@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="page-title">Tag Faces in Photo</h2>
+        <p class="page-subtitle">Type the name of each detected face</p>
+    </div>
+    <a href="/gallery" class="btn btn-navy">Back to Gallery</a>
+</div>
+
+<div class="card border-0 shadow-sm p-4 mb-4"
+     style="border-radius: 14px;">
+    <h6 class="fw-bold mb-3" style="color: #0B2458;">
+        {{ photo.event.event_name }}
+    </h6>
+    <img src="{{ url_for('static', filename='uploads/' + photo.filename) }}"
+         class="img-fluid rounded-3"
+         style="max-height: 380px; object-fit: contain;">
+</div>
+
+{% if face_tags %}
+<div class="card border-0 shadow-sm p-4"
+     style="border-radius: 14px;">
+    <h6 class="fw-bold mb-4" style="color: #0B2458;">
+        {{ face_tags|length }} Face(s) Detected — Enter Names Below
+    </h6>
+
+    <form method="POST" action="/tag_faces/{{ photo.id }}">
+        <div class="row g-3">
+            {% for tag in face_tags %}
+            <div class="col-md-3 col-sm-6">
+                <div class="text-center p-3 rounded-3"
+                     style="border: 1.5px solid #E0E8FF;
+                            background: #F8FAFF;">
+
+                    {% set base = photo.filename.rsplit('.', 1)[0] %}
+                    {% set face_img = 'uploads/faces/' + base +
+                       '_face_' + loop.index0|string + '.jpg' %}
+
+                    <img src="{{ url_for('static', filename=face_img) }}"
+                         class="rounded-3 mb-2"
+                         style="width: 90px; height: 90px;
+                                object-fit: cover;
+                                border: 2px solid #0B2458;"
+                         onerror="this.style.display='none'">
+
+                    <p class="text-muted mb-2" style="font-size: 12px;">
+                        Face {{ loop.index }}
+                    </p>
+
+                    <input type="text"
+                           name="name_{{ tag.id }}"
+                           class="form-control form-control-sm text-center"
+                           placeholder="Enter name..."
+                           value="{{ tag.person_name
+                                    if tag.person_name else '' }}">
+
+                    <input type="hidden"
+                           name="tag_id_{{ loop.index0 }}"
+                           value="{{ tag.id }}">
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <input type="hidden" name="total_tags"
+               value="{{ face_tags|length }}">
+
+        <div class="mt-4">
+            <button type="submit"
+                    class="btn btn-navy btn-lg fw-bold px-5">
+                Save Names
+            </button>
+        </div>
+    </form>
+</div>
+
+{% else %}
+    <div class="text-center py-5">
+        <p class="text-muted fs-5">No faces detected in this photo.</p>
+        <a href="/gallery" class="btn btn-navy mt-2">Back to Gallery</a>
+    </div>
+{% endif %}
+
+{% endblock %}
