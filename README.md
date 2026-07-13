@@ -45,9 +45,16 @@ and download them.
    python run.py
    ```
 
-   Tables are created automatically on first start. Register a user, then
-   set their `role` to `admin` in the `user` table to create the first
-   administrator.
+   Tables are created automatically on first start.
+
+5. Create the first administrator account:
+
+   ```
+   flask --app run.py create-admin
+   ```
+
+   Regular users who sign up through the Register page get the
+   `student` role.
 
 ## Project structure
 

@@ -1,5 +1,6 @@
 import os
 
+import click
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -33,7 +34,32 @@ def create_app():
         from app import models
         db.create_all()
 
+    register_cli(app)
+
     return app
+
+
+def register_cli(app):
+    @app.cli.command('create-admin')
+    @click.option('--name', prompt='Full name')
+    @click.option('--email', prompt='Email')
+    @click.option('--password', prompt=True, hide_input=True,
+                  confirmation_prompt=True)
+    def create_admin(name, email, password):
+        """Create an administrator account."""
+        from app.models import User
+        email = email.strip().lower()
+        if User.query.filter_by(email=email).first():
+            click.echo('A user with that email already exists.')
+            return
+        db.session.add(User(
+            full_name=name.strip(),
+            email=email,
+            password=bcrypt.generate_password_hash(password).decode('utf-8'),
+            role='admin',
+        ))
+        db.session.commit()
+        click.echo(f'Admin account created for {email}.')
 
 from app.models import User
 
