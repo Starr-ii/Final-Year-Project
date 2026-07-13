@@ -7,34 +7,29 @@
         <h2 class="page-title">Photo Gallery</h2>
         <p class="page-subtitle">Browse all school event photos</p>
     </div>
+    {% if current_user.role == 'admin' %}
     <a href="/upload" class="btn btn-navy">+ Upload Photos</a>
+    {% endif %}
 </div>
 
 {% if photos %}
 
-    {% set current_event = namespace(name='') %}
+    {% for event_name, event_photos in photos|groupby('event.event_name') %}
+        <div class="mb-3 mt-4 p-3"
+             style="background: #0B2458; border-radius: 10px;">
+            <h5 class="mb-0 fw-bold" style="color: white; font-size: 15px;">
+                {{ event_name }}
+            </h5>
+        </div>
+        <div class="row g-3 mb-5">
 
-    {% for photo in photos %}
-
-        {% if photo.event.event_name != current_event.name %}
-            {% set current_event.name = photo.event.event_name %}
-            {% if not loop.first %}<div class="mb-5"></div>{% endif %}
-            <div class="mb-3 mt-4 p-3"
-                 style="background: #0B2458; border-radius: 10px;">
-                <h5 class="mb-0 fw-bold" style="color: white; font-size: 15px;">
-                    {{ photo.event.event_name }}
-                </h5>
-            </div>
-            <div class="row g-3">
-        {% endif %}
-
+        {% for photo in event_photos %}
         <div class="col-md-3 col-sm-6">
             <div class="card border-0 shadow-sm h-100"
                  style="border-radius: 12px; overflow: hidden;">
                 <img src="{{ url_for('static',
                              filename='uploads/' + photo.filename) }}"
                      class="gallery-img"
-                     data-index="{{ loop.index0 }}"
                      data-src="{{ url_for('static',
                                   filename='uploads/' + photo.filename) }}"
                      data-event="{{ photo.event.event_name }}"
@@ -50,6 +45,7 @@
                         {{ photo.faces_detected }} face(s) detected
                     </p>
                     <div class="d-flex gap-2">
+                        {% if current_user.role == 'admin' %}
                         <a href="/tag_faces/{{ photo.id }}"
                            class="btn btn-sm fw-bold flex-fill"
                            style="background: #0B2458; color: white;
@@ -59,32 +55,51 @@
                            onmouseout="this.style.background='#0B2458'">
                             Tag Faces
                         </a>
-                        <a href="/delete_photo/{{ photo.id }}"
+                        <form method="POST"
+                              action="/delete_photo/{{ photo.id }}"
+                              class="flex-fill d-flex"
+                              onsubmit="return confirm('Delete this photo?')">
+                            <input type="hidden" name="csrf_token"
+                                   value="{{ csrf_token() }}">
+                            <button type="submit"
+                                    class="btn btn-sm fw-bold flex-fill"
+                                    style="background: white; color: #DC2626;
+                                           border: 1.5px solid #FECACA;
+                                           border-radius: 8px; font-size: 12px;
+                                           padding: 8px 0; transition: all 0.2s;"
+                                    onmouseover="this.style.background='#DC2626';
+                                                 this.style.color='white'"
+                                    onmouseout="this.style.background='white';
+                                                this.style.color='#DC2626'">
+                                Delete
+                            </button>
+                        </form>
+                        {% else %}
+                        <a href="/download/{{ photo.id }}"
                            class="btn btn-sm fw-bold flex-fill"
-                           style="background: white; color: #DC2626;
-                                  border: 1.5px solid #FECACA;
+                           style="background: #0B2458; color: white;
                                   border-radius: 8px; font-size: 12px;
                                   padding: 8px 0; transition: all 0.2s;"
-                           onmouseover="this.style.background='#DC2626';
-                                        this.style.color='white'"
-                           onmouseout="this.style.background='white';
-                                       this.style.color='#DC2626'"
-                           onclick="return confirm('Delete this photo?')">
-                            Delete
+                           onmouseover="this.style.background='#1A3A7A'"
+                           onmouseout="this.style.background='#0B2458'">
+                            Download
                         </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
+        {% endfor %}
 
-        {% if loop.last %}</div>{% endif %}
-
+        </div>
     {% endfor %}
 
 {% else %}
     <div class="text-center py-5">
         <p class="text-muted fs-5">No photos yet.</p>
+        {% if current_user.role == 'admin' %}
         <a href="/upload" class="btn btn-navy mt-2">Upload First Photos</a>
+        {% endif %}
     </div>
 {% endif %}
 

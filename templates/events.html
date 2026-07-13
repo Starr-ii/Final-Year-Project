@@ -38,19 +38,25 @@
                            onmouseout="this.style.background='#0B2458'">
                             Upload Photos
                         </a>
-                        <a href="/delete_event/{{ event.id }}"
-                           class="btn btn-sm fw-bold flex-fill"
-                           style="background: white; color: #DC2626;
-                                  border: 1.5px solid #FECACA;
-                                  border-radius: 8px; padding: 9px 0;
-                                  font-size: 13px; transition: all 0.2s;"
-                           onmouseover="this.style.background='#DC2626';
-                                        this.style.color='white'"
-                           onmouseout="this.style.background='white';
-                                       this.style.color='#DC2626'"
-                           onclick="return confirm('Delete this event?')">
-                            Delete
-                        </a>
+                        <form method="POST"
+                              action="/delete_event/{{ event.id }}"
+                              class="flex-fill d-flex"
+                              onsubmit="return confirm('Delete this event and all its photos?')">
+                            <input type="hidden" name="csrf_token"
+                                   value="{{ csrf_token() }}">
+                            <button type="submit"
+                                    class="btn btn-sm fw-bold flex-fill"
+                                    style="background: white; color: #DC2626;
+                                           border: 1.5px solid #FECACA;
+                                           border-radius: 8px; padding: 9px 0;
+                                           font-size: 13px; transition: all 0.2s;"
+                                    onmouseover="this.style.background='#DC2626';
+                                                 this.style.color='white'"
+                                    onmouseout="this.style.background='white';
+                                                this.style.color='#DC2626'">
+                                Delete
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

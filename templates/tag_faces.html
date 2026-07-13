@@ -15,7 +15,10 @@
     <h6 class="fw-bold mb-3" style="color: #0B2458;">
         {{ photo.event.event_name }}
     </h6>
-    <img src="{{ url_for('static', filename='uploads/' + photo.filename) }}"
+    {# Show the annotated copy (green boxes); fall back to the original #}
+    <img src="{{ url_for('static', filename='uploads/processed_' + photo.filename) }}"
+         onerror="this.onerror=null;
+                  this.src='{{ url_for('static', filename='uploads/' + photo.filename) }}'"
          class="img-fluid rounded-3"
          style="max-height: 380px; object-fit: contain;">
 </div>
@@ -28,6 +31,7 @@
     </h6>
 
     <form method="POST" action="/tag_faces/{{ photo.id }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <div class="row g-3">
             {% for tag in face_tags %}
             <div class="col-md-3 col-sm-6">
