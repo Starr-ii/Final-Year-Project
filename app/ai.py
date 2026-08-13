@@ -1,7 +1,11 @@
-import cv2
+import logging
 import os
+
+import cv2
 import rawpy
-import numpy as np
+
+logger = logging.getLogger(__name__)
+
 
 def convert_raw_to_jpeg(raw_path):
     try:
@@ -11,16 +15,24 @@ def convert_raw_to_jpeg(raw_path):
         cv2.imwrite(jpeg_path, cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR))
         return jpeg_path
     except Exception as e:
-        print(f"RAW conversion error: {e}")
+        logger.error("RAW conversion error for %s: %s", raw_path, e)
         return None
 
+
 def detect_faces(image_path):
+    """Detect faces in the image and return (count, [(x, y, w, h), ...]).
+
+    The original image is never modified. Two extra artefacts are written
+    next to it:
+      - processed_<name>: a copy with green boxes drawn around faces
+      - faces/<base>_face_<i>.jpg: a crop of each face, used by the
+        tag-faces page as thumbnails
+    """
     img = cv2.imread(image_path)
-    print(f"Image loaded: {img is not None}") 
     if img is None:
+        logger.warning("Could not read image for face detection: %s",
+                       image_path)
         return 0, []
-    
-    print(f"Image shape: {img.shape}")
 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -35,21 +47,22 @@ def detect_faces(image_path):
         minSize=(80, 80)
     )
 
-    print(f"Faces detected: {len(faces)}")
+    folder = os.path.dirname(image_path)
+    filename = os.path.basename(image_path)
+    base = filename.rsplit('.', 1)[0]
 
-    # Draw green boxes around detected faces
+    # Save a crop of each face for the tagging page
+    faces_dir = os.path.join(folder, 'faces')
+    os.makedirs(faces_dir, exist_ok=True)
+    for i, (x, y, w, h) in enumerate(faces):
+        crop = img[y:y + h, x:x + w]
+        cv2.imwrite(os.path.join(faces_dir, f'{base}_face_{i}.jpg'), crop)
+
+    # Save an annotated copy with green boxes; the original stays untouched
+    annotated = img.copy()
     for (x, y, w, h) in faces:
-        cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        cv2.rectangle(annotated, (x, y), (x + w, y + h), (0, 255, 0), 2)
+    cv2.imwrite(os.path.join(folder, 'processed_' + filename), annotated)
 
-    # Overwrite original with processed version
-    cv2.imwrite(image_path, img)
-
-    # Return face count AND coordinates
     face_list = [(int(x), int(y), int(w), int(h)) for (x, y, w, h) in faces]
     return len(faces), face_list
-
-
-   # Save processed image
-    # processed_filename = 'processed_' + os.path.basename(image_path)
-    # processed_path = os.path.join(
-    #     os.path.dirname(image_path), processed_filename)

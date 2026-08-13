@@ -1,6 +1,9 @@
 from app import db
 from flask_login import UserMixin
-from datetime import datetime
+from datetime import datetime, timezone
+
+def utcnow():
+    return datetime.now(timezone.utc)
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -8,7 +11,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
     role = db.Column(db.String(20), default='student')
-    date_registered = db.Column(db.DateTime, default=datetime.utcnow)
+    date_registered = db.Column(db.DateTime, default=utcnow)
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -21,7 +24,7 @@ class Event(db.Model):
 class Photo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(200), nullable=False)
-    upload_date = db.Column(db.DateTime, default=datetime.utcnow)
+    upload_date = db.Column(db.DateTime, default=utcnow)
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'),
                          nullable=False)
     faces_detected = db.Column(db.Integer, default=0)

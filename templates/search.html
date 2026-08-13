@@ -12,6 +12,7 @@
 <div class="card border-0 shadow-sm p-4 mb-4"
      style="border-radius: 14px;">
     <form method="POST" action="/search">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <div class="row g-3 align-items-end">
             <div class="col-md-6">
                 <label class="form-label">Search by Name or Event</label>

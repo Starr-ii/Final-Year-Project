@@ -1,0 +1,10 @@
+flask
+flask-sqlalchemy
+flask-login
+flask-bcrypt
+flask-wtf
+pymysql
+cryptography
+opencv-python<5
+rawpy
+numpy
