@@ -304,11 +304,11 @@
     </div>
 </nav>
 
-<!-- Flash Messages -->
+
 <!-- Flash Messages -->
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
-    <div class="container-fluid px-4 mt-3">
+    <div class="{% if request.path == '/' %}alert-container-home{% else %}container-fluid px-4 mt-3{% endif %}">
         {% for category, message in messages %}
             <div class="alert alert-{{ category }}
                         alert-dismissible fade show">
@@ -322,7 +322,7 @@
 {% endwith %}
 
 <!-- Page Content -->
-<div class="main-content">
+<div class="main-content" id="main-wrapper">
     {% block content %}{% endblock %}
 </div>
 
